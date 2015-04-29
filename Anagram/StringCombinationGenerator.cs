@@ -14,29 +14,42 @@ namespace Anagram
 
             for (int i = 0; i < charsOfWord.Length; i++)
             {
-                char currentChar = charsOfWord[i];
+                string wordWithOutCurrentChar = createStringWithoutCharAtIndex(word, i);
 
-                string leftString = string.Empty;
-                string rightString = string.Empty;
+                IEnumerable<string> combinationsWithCurrentChar = generateCombinationsWithChar(charsOfWord[i], wordWithOutCurrentChar);
 
-                if (i > 0)
-                    leftString = word.Substring(0, i);
-
-                if (i < word.Length - 1)
-                    rightString = word.Substring(i + 1, word.Length - (i + 1));
-
-
-                string wordWithOutCurrentChar = leftString + rightString;
-
-                for (int j = 0; j < wordWithOutCurrentChar.Length; j++)
+                combinationsWithCurrentChar.ToList().ForEach((combination) =>
                 {
-                    string combination = wordWithOutCurrentChar.Insert(j, currentChar.ToString());
                     if (!combinations.Contains(combination) && !word.Equals(combination))
                         combinations.Add(combination);
-                }
+                });
             }
 
             return combinations;
+        }
+
+        private static string createStringWithoutCharAtIndex(string word, int index)
+        {
+            string leftString = string.Empty;
+            string rightString = string.Empty;
+
+            if (index > 0)
+                leftString = word.Substring(0, index);
+
+            if (index < word.Length - 1)
+                rightString = word.Substring(index + 1, word.Length - (index + 1));
+
+
+            string wordWithOutCurrentChar = leftString + rightString;
+            return wordWithOutCurrentChar;
+        }
+
+        private static IEnumerable<string> generateCombinationsWithChar(char currentChar, string wordWithOutCurrentChar)
+        {
+            for (int j = 0; j < wordWithOutCurrentChar.Length; j++)
+            {
+                yield return wordWithOutCurrentChar.Insert(j, currentChar.ToString());
+            }
         }
     }
 }
