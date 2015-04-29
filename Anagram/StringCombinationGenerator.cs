@@ -9,25 +9,44 @@ namespace Anagram
     {
         public List<string> GenerateSameLengthCombinations(string word)
         {
+            var combinations = generateCombinationsRecursive(word);
+
+            combinations.Remove(word);
+
+            return combinations;
+        }
+
+        private List<string> generateCombinationsRecursive(string word)
+        {
+            if (word.Length == 1)
+                return new List<string> { word };
+
             char[] charsOfWord = word.ToCharArray();
             List<string> combinations = new List<string>();
+
 
             for (int i = 0; i < charsOfWord.Length; i++)
             {
                 string wordWithOutCurrentChar = createStringWithoutCharAtIndex(word, i);
 
-                IEnumerable<string> combinationsWithCurrentChar = generateCombinationsWithChar(charsOfWord[i], wordWithOutCurrentChar);
+                List<string> innerCombinations = generateCombinationsRecursive(wordWithOutCurrentChar);
 
-                combinationsWithCurrentChar.ToList().ForEach((combination) =>
+                foreach (string innerCombination in innerCombinations)
                 {
-                    if (!combinations.Contains(combination) && !word.Equals(combination))
-                        combinations.Add(combination);
-                });
+                    IEnumerable<string> combinationsWithCurrentChar = generateCombinationsWithChar(charsOfWord[i], innerCombination);
+
+                    combinationsWithCurrentChar.ToList().ForEach((combination) =>
+                    {
+                        if (!combinations.Contains(combination))
+                            combinations.Add(combination);
+                    });
+                }
             }
 
             return combinations;
         }
 
+  
         private static string createStringWithoutCharAtIndex(string word, int index)
         {
             string leftString = string.Empty;

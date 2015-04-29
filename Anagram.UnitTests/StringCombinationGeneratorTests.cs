@@ -27,10 +27,10 @@ namespace Anagram.UnitTests
 
         [Test]
         [TestCase("a")]
+        [TestCase("ab")]
         [TestCase("abc")]
         [TestCase("abcd")]
         [TestCase("abcde")]
-        [TestCase("aabbccccddee")]
         public void DoesNotGenerateSameWord(string word)
         {
             List<string> combinations = generator.GenerateSameLengthCombinations(word);
@@ -40,11 +40,10 @@ namespace Anagram.UnitTests
 
         [Test]
         [TestCase("a")]
+        [TestCase("ab")]
         [TestCase("abc")]
         [TestCase("abcd")]
         [TestCase("abcde")]
-        [TestCase("aabbccccddee")]
-
         public void DoesNotGeneratesACombinationMoreThanOnce(string word)
         {
             List<string> combinations = generator.GenerateSameLengthCombinations(word);
@@ -54,10 +53,10 @@ namespace Anagram.UnitTests
 
         [Test]
         [TestCase("a")]
+        [TestCase("ab")]
         [TestCase("abc")]
         [TestCase("abcd")]
         [TestCase("abcde")]
-        [TestCase("aabbccccddee")]
         public void GeneratesCombinationsWithSameLength(string word)
         {
             List<string> combinations = generator.GenerateSameLengthCombinations(word);
@@ -67,16 +66,28 @@ namespace Anagram.UnitTests
 
         [Test]
         [TestCase("a")]
+        [TestCase("ab")]
         [TestCase("abc")]
         [TestCase("abcd")]
         [TestCase("abcde")]
         public void GeneratesCorrectNumberOfCombinations(string word)
+        {
+            List<string> combinations = generator.GenerateSameLengthCombinations(word);            
+
+            //For a word with unique characters, should generate (n! -1) combinations.
+            Assert.AreEqual(calculateFactorialOf(word.Length) - 1, combinations.Count);
+        }
+
+
+        [TestCase("abcdefghjkl")]
+        public void GeneratesCorrectNumberOfCombinationsForLogWords(string word)
         {
             List<string> combinations = generator.GenerateSameLengthCombinations(word);
 
             //For a word with unique characters, should generate (n! -1) combinations.
             Assert.AreEqual(calculateFactorialOf(word.Length) - 1, combinations.Count);
         }
+
 
         private int calculateFactorialOf(int number)
         {
