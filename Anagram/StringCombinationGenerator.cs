@@ -40,8 +40,7 @@ namespace Anagram
                 rightString = word.Substring(index + 1, word.Length - (index + 1));
 
 
-            string wordWithOutCurrentChar = leftString + rightString;
-            return wordWithOutCurrentChar;
+            return leftString + rightString;
         }
 
         private static IEnumerable<string> generateCombinationsWithChar(char currentChar, string wordWithOutCurrentChar)
