@@ -5,19 +5,23 @@ using System.Text;
 
 namespace Anagram
 {
-    public class WordRepository
+    public class WordRepository : IWordRepository
     {
         private List<string> wordList;
 
-        public WordRepository(string[] words)
+        public WordRepository()
         {
             wordList = new List<string>();
-            wordList.AddRange(words);
         }
 
         public bool Contains(string word)
         {
             return wordList.Contains(word);
+        }
+
+        public void Add(string word)
+        {
+            wordList.Add(word);
         }
     }
 }

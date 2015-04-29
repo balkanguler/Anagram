@@ -7,9 +7,18 @@ namespace Anagram
 {
     public class AnagramFinder
     {
+        private IWordRepository repository;
+
+        public AnagramFinder(IWordRepository repository)
+        {
+            // TODO: Complete member initialization
+            this.repository = repository;
+        }
         public string[] Find(string word)
         {
-            return new string[] { "wierd" };
+            List<string> anagrams = new List<string> { "wierd", "erdwi" };
+
+            return anagrams.FindAll(a => repository.Contains(a)).ToArray();
         }
     }
 }

@@ -1,22 +1,29 @@
 ﻿using NUnit.Framework;
 using Anagram;
 using System.Collections.Generic;
+using NSubstitute;
 
 namespace Anagram.UnitTests
 {
     [TestFixture]
     public class AnagramFinderTests
     {
+
         [Test]
-        public void FindsAnagramsOfAWord()
+        public void DoesNotReturnAnagramsThatNotInRepository()
         {
-            AnagramFinder finder = new AnagramFinder();
             var word = "wired";
+            var anagramWord = "wierd";
 
-            string[] anagrams = finder.Find(word);
+            IWordRepository repository = Substitute.For<IWordRepository>();
 
-            Assert.That(new List<string>(anagrams).Contains("wierd"), Is.True);
+            repository.Contains(anagramWord).Returns(false);
 
+            var sut = new AnagramFinder(repository);
+
+            string[] anagrams = sut.Find(word);
+
+            Assert.IsFalse(new List<string>(anagrams).Contains(anagramWord));
         }
     }
 }
