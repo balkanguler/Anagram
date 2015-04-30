@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -7,46 +8,50 @@ namespace Anagram
 {
     public class StringCombinationGenerator
     {
+        HashSet<string> traversedCombinations = new HashSet<string>();
+
         public List<string> GenerateSameLengthCombinations(string word)
         {
             var combinations = generateCombinationsRecursive(word);
 
             combinations.Remove(word);
 
-            return combinations;
+            return combinations.ToList();
         }
 
-        private List<string> generateCombinationsRecursive(string word)
+        private HashSet<string> generateCombinationsRecursive(string word)
         {
             if (word.Length == 1)
-                return new List<string> { word };
+                return new HashSet<string> { word };
 
             char[] charsOfWord = word.ToCharArray();
-            List<string> combinations = new List<string>();
+            HashSet<string> combinations =new  HashSet<string>();
 
 
             for (int i = 0; i < charsOfWord.Length; i++)
             {
                 string wordWithOutCurrentChar = createStringWithoutCharAtIndex(word, i);
 
-                List<string> innerCombinations = generateCombinationsRecursive(wordWithOutCurrentChar);
-
-                foreach (string innerCombination in innerCombinations)
+                if (!traversedCombinations.Contains(wordWithOutCurrentChar))
                 {
-                    IEnumerable<string> combinationsWithCurrentChar = generateCombinationsWithChar(charsOfWord[i], innerCombination);
+                    HashSet<string> innerCombinations = generateCombinationsRecursive(wordWithOutCurrentChar);
 
-                    combinationsWithCurrentChar.ToList().ForEach((combination) =>
+                    foreach (string innerCombination in innerCombinations)
                     {
-                        if (!combinations.Contains(combination))
-                            combinations.Add(combination);
-                    });
+                        IEnumerable<string> combinationsWithCurrentChar = generateCombinationsWithChar(charsOfWord[i], innerCombination);
+
+                        combinationsWithCurrentChar.ToList().ForEach((combination) =>
+                        {
+                            if (!combinations.Contains(combination))
+                                combinations.Add(combination);
+                        });
+                    }
                 }
             }
 
             return combinations;
         }
 
-  
         private static string createStringWithoutCharAtIndex(string word, int index)
         {
             string leftString = string.Empty;
