@@ -11,7 +11,6 @@ namespace Anagram
 
         public AnagramFinder(IWordRepository repository)
         {
-            // TODO: Complete member initialization
             this.repository = repository;
         }
         public string[] Find(string word)
