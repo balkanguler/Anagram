@@ -6,14 +6,15 @@ using System.Text;
 
 namespace Anagram
 {
-    public class StringCombinationGenerator
+    public class StringCombinationGenerator : IStringCombinationProvider
     {
         HashSet<string> traversedCombinations = new HashSet<string>();
 
-        public List<string> GenerateSameLengthCombinations(string word)
+        public List<string> ProvideSameLengthCombinations(string word)
         {
             var combinations = generateCombinationsRecursive(word);
 
+            //removing the word itself
             combinations.Remove(word);
 
             return combinations.ToList();

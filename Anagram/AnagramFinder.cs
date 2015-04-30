@@ -13,11 +13,14 @@ namespace Anagram
         {
             this.repository = repository;
         }
-        public string[] Find(string word)
+        public List<string> Find(string word)
         {
-            List<string> anagrams = new List<string> { "wierd", "erdwi" };
+            StringCombinationGenerator combinationGenerator = new StringCombinationGenerator();
 
-            return anagrams.FindAll(a => repository.Contains(a)).ToArray();
+            List<string> anagrams = combinationGenerator.ProvideSameLengthCombinations(word);
+
+
+            return anagrams.FindAll(a => repository.Contains(a));
         }
     }
 }

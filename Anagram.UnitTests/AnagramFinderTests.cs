@@ -10,7 +10,24 @@ namespace Anagram.UnitTests
     {
 
         [Test]
-        public void DoesNotReturnAnagramsThatNotInRepository()
+        public void ReturnsAnagramsInRepository()
+        {
+            var word = "abc";
+            List<string> anagrams = new List<string> { "acb", "bac", "bca", "cab", "cba" };
+
+            IWordRepository repository = Substitute.For<IWordRepository>();
+
+            anagrams.ForEach(a => repository.Contains(a).Returns(true));
+
+            var anagramFinder = new AnagramFinder(repository);
+
+            List<string> foundedAnagrams = anagramFinder.Find(word);
+
+            anagrams.ForEach(anagram => Assert.IsTrue(foundedAnagrams.Contains(anagram)));
+        }
+
+        [Test]
+        public void DoesNotReturnAnagramsNotInRepository()
         {
             var word = "wired";
             var anagramWord = "wierd";
@@ -19,11 +36,11 @@ namespace Anagram.UnitTests
 
             repository.Contains(anagramWord).Returns(false);
 
-            var sut = new AnagramFinder(repository);
+            var anagramFinder = new AnagramFinder(repository);
 
-            string[] anagrams = sut.Find(word);
+            List<string> foundedAnagrams = anagramFinder.Find(word);
 
-            Assert.IsFalse(new List<string>(anagrams).Contains(anagramWord));
+            Assert.IsFalse(foundedAnagrams.Contains(anagramWord));
         }
     }
 }

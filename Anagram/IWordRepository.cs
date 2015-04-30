@@ -11,5 +11,7 @@ namespace Anagram
         bool Contains(string word);
 
         void Add(string word);
+
+        IEnumerable<string> GetWordsWithLength(int length);
     }
 }

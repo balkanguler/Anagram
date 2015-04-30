@@ -42,5 +42,12 @@ namespace Anagram
                 }
             }
         }
+
+        public IEnumerable<string> GetWordsWithLength(int length)
+        {
+            foreach (string word in wordList)
+                if (word.Length == length)
+                    yield return word;
+        }
     }
 }
