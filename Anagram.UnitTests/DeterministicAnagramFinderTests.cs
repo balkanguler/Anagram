@@ -6,7 +6,7 @@ using NSubstitute;
 namespace Anagram.UnitTests
 {
     [TestFixture]
-    public class AnagramFinderTests
+    public class DeterministicAnagramFinderTests
     {
 
         [Test]
@@ -16,10 +16,10 @@ namespace Anagram.UnitTests
             List<string> anagrams = new List<string> { "acb", "bac", "bca", "cab", "cba" };
 
             IWordRepository repository = Substitute.For<IWordRepository>();
-
+            
             anagrams.ForEach(a => repository.Contains(a).Returns(true));
 
-            var anagramFinder = new AnagramFinder(repository);
+            var anagramFinder = new DeterministicAnagramFinder(repository);
 
             List<string> foundedAnagrams = anagramFinder.Find(word);
 
@@ -36,7 +36,7 @@ namespace Anagram.UnitTests
 
             repository.Contains(anagramWord).Returns(false);
 
-            var anagramFinder = new AnagramFinder(repository);
+            var anagramFinder = new DeterministicAnagramFinder(repository);
 
             List<string> foundedAnagrams = anagramFinder.Find(word);
 

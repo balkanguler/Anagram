@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Anagram
 {
-    public class StringCombinationGenerator : IStringCombinationProvider
+    public class StringCombinationGenerator 
     {
         HashSet<string> traversedCombinations = new HashSet<string>();
 
@@ -27,7 +27,6 @@ namespace Anagram
 
             char[] charsOfWord = word.ToCharArray();
             HashSet<string> combinations =new  HashSet<string>();
-
 
             for (int i = 0; i < charsOfWord.Length; i++)
             {
@@ -71,9 +70,7 @@ namespace Anagram
         private static IEnumerable<string> generateCombinationsWithChar(char currentChar, string wordWithOutCurrentChar)
         {
             for (int j = 0; j < wordWithOutCurrentChar.Length; j++)
-            {
                 yield return wordWithOutCurrentChar.Insert(j, currentChar.ToString());
-            }
         }
     }
 }

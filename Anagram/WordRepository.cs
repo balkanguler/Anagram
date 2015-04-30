@@ -10,6 +10,7 @@ namespace Anagram
     public class WordRepository : IWordRepository
     {
         private HashSet<string> wordList;
+        private bool loaded;
 
         public WordRepository()
         {
@@ -23,11 +24,15 @@ namespace Anagram
 
         public void Add(string word)
         {
-            wordList.Add(word);
+            if (!wordList.Contains(word))
+                wordList.Add(word);
         }
 
         public void LoadFromUrl(string url)
         {
+            if (loaded)
+                return;
+
             var webRequest = WebRequest.Create(url);
 
             using (var response = webRequest.GetResponse())
@@ -41,6 +46,8 @@ namespace Anagram
                     word = reader.ReadLine();
                 }
             }
+
+            loaded = true;
         }
 
         public IEnumerable<string> GetWordsWithLength(int length)

@@ -10,6 +10,7 @@ namespace Anagram
     {
         static void Main(string[] args)
         {
+            WordRepository wordRepository = new WordRepository();
             string input = string.Empty;
 
             Console.WriteLine("Wellcome to the Anagram Finder");
@@ -34,12 +35,18 @@ namespace Anagram
                 if (words.Count > 0)
                 {
                     Console.WriteLine("Searching ...");
-                    WordRepository wordRepository = new WordRepository();
-                    wordRepository.LoadFromUrl("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
 
-                    AnagramFinder anagramFinder = new AnagramFinder(wordRepository);
+                    wordRepository.LoadFromUrl("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
                     foreach (string word in words)
                     {
+                        IAnagramFinder anagramFinder;
+
+                        if (word.Length > 5)
+                            anagramFinder = new HeuristicAnagramFinder(wordRepository);
+                        else
+                            anagramFinder = new DeterministicAnagramFinder(wordRepository);
+
+                        
                         List<string> foundAnagrams = anagramFinder.Find(word);
                         Console.Write(word);
                         if (foundAnagrams.Count == 0)

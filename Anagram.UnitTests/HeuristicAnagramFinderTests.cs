@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Anagram.UnitTests
 {
     [TestFixture]
-    public class StringCombinationFinderTests
+    public class HeuristicAnagramFinderTests
     {
 
         [Test]
@@ -24,9 +24,9 @@ namespace Anagram.UnitTests
 
             wordRepository.GetWordsWithLength(5).Returns(existingWords);
 
-            StringCombinationFinder finder = new StringCombinationFinder(wordRepository);
+            HeuristicAnagramFinder anagramFinder = new HeuristicAnagramFinder(wordRepository);
 
-            var foundCombinations = finder.ProvideSameLengthCombinations(word);
+            var foundCombinations = anagramFinder.Find(word);
 
             Assert.AreEqual(anagrams.Count, foundCombinations.Count);
 

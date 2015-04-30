@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Anagram
 {
-    public class AnagramFinder
+    public class DeterministicAnagramFinder : IAnagramFinder
     {
         private IWordRepository repository;
 
-        public AnagramFinder(IWordRepository repository)
+        public DeterministicAnagramFinder(IWordRepository repository)
         {
             this.repository = repository;
         }
@@ -20,7 +20,7 @@ namespace Anagram
             List<string> anagrams = combinationGenerator.ProvideSameLengthCombinations(word);
 
 
-            return anagrams.FindAll(a => repository.Contains(a));
+            return anagrams.FindAll(anagram => repository.Contains(anagram));
         }
     }
 }

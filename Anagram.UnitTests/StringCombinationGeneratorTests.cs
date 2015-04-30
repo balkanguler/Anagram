@@ -74,7 +74,6 @@ namespace Anagram.UnitTests
         [TestCase("abcdefg")]
         [TestCase("abcdefgh")]
         [TestCase("abcdefghj")]
-        [TestCase("abcdefghjk")]
         public void GeneratesCorrectNumberOfCombinations(string word)
         {
             List<string> combinations = generator.ProvideSameLengthCombinations(word);            
@@ -84,7 +83,7 @@ namespace Anagram.UnitTests
         }
 
 
-        [TestCase("abcdefghjkl")]
+        [TestCase("a")]
         public void GeneratesCorrectNumberOfCombinationsForLongWords(string word)
         {
             List<string> combinations = generator.ProvideSameLengthCombinations(word);

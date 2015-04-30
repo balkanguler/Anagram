@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Anagram
 {
-    public interface IStringCombinationProvider
+    public interface IAnagramFinder
     {
-        List<string> ProvideSameLengthCombinations(string word);
+        List<string> Find(string word);
+
     }
 }
