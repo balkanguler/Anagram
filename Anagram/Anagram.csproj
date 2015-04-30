@@ -46,6 +46,7 @@
     <Compile Include="IWordRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringCombinationFinder.cs" />
     <Compile Include="StringCombinationGenerator.cs" />
     <Compile Include="WordRepository.cs" />
   </ItemGroup>
