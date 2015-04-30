@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Anagram
 {
@@ -28,26 +29,28 @@ namespace Anagram
                 wordList.Add(word);
         }
 
-        public void LoadFromUrl(string url)
+        public Task LoadFromUrlAsync(string url)
         {
-            if (loaded)
-                return;
-
-            var webRequest = WebRequest.Create(url);
-
-            using (var response = webRequest.GetResponse())
-            using (var content = response.GetResponseStream())
-            using (var reader = new StreamReader(content))
-            {
-                string word = reader.ReadLine();
-                while (word != null)
+            return Task.Run(() =>
                 {
-                    Add(word);
-                    word = reader.ReadLine();
-                }
-            }
+                    if (loaded)
+                        return;
 
-            loaded = true;
+                    var webRequest = WebRequest.Create(url);
+
+                    using (var response = webRequest.GetResponse())
+                    using (var content = response.GetResponseStream())
+                    using (var reader = new StreamReader(content))
+                    {
+                        string word = reader.ReadLine();
+                        while (word != null)
+                        {
+                            Add(word);
+                            word = reader.ReadLine();
+                        }
+                    }
+                    loaded = true;
+                });
         }
 
         public IEnumerable<string> GetWordsWithLength(int length)

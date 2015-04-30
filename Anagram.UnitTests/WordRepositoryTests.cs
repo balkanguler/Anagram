@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Anagram.UnitTests
 {
@@ -27,7 +28,9 @@ namespace Anagram.UnitTests
         [TestCase("zyzzyvas")]
         public void LoadsWordsFromUrl(string word)
         {
-            repository.LoadFromUrl("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
+            Task task = repository.LoadFromUrlAsync("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
+            task.Wait();
+
             Assert.IsTrue(repository.Contains(word));
         }
 

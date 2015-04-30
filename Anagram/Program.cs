@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Anagram
@@ -9,15 +10,18 @@ namespace Anagram
     class Program
     {
         static void Main(string[] args)
-        {
+        {            
             WordRepository wordRepository = new WordRepository();
-            string input = string.Empty;
+            Task taskWordLoad = wordRepository.LoadFromUrlAsync("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
+            
+            WriteConsoleWithRedColor("Wellcome to the Anagram Finder");
 
-            Console.WriteLine("Wellcome to the Anagram Finder");
+            string input = string.Empty;
 
             while (!input.Equals("E"))
             {
-                Console.WriteLine("Please enter words to find anagrams. To start search press 'S'. For exit press 'E' ");
+                WriteConsoleWithRedColor("****** Please enter words to find anagrams and press S to start searching.");
+                WriteConsoleWithRedColor("****** For exit press E.");
 
                 List<string> words = new List<string>();
 
@@ -34,35 +38,45 @@ namespace Anagram
 
                 if (words.Count > 0)
                 {
-                    Console.WriteLine("Searching ...");
-
-                    wordRepository.LoadFromUrl("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt");
+                    WriteConsoleWithRedColor("Searching ...");
+                    taskWordLoad.Wait();
                     foreach (string word in words)
                     {
-                        IAnagramFinder anagramFinder;
-
-                        if (word.Length > 5)
-                            anagramFinder = new HeuristicAnagramFinder(wordRepository);
-                        else
-                            anagramFinder = new DeterministicAnagramFinder(wordRepository);
-
-                        
-                        List<string> foundAnagrams = anagramFinder.Find(word);
-                        Console.Write(word);
-                        if (foundAnagrams.Count == 0)
-                            Console.WriteLine(" :  << Could not find any anagramas for this word >>");
-                        else
+                        try
                         {
-                            string anagramsText = string.Join(", ", foundAnagrams.ToArray());
+                            AnagramProvider anagramProvider = new AnagramProvider(wordRepository);
 
-                            Console.WriteLine(" : " + anagramsText);
+                            List<string> foundAnagrams = anagramProvider.FindAnagrams(word);
+                            Console.Write(word);
+                            if (foundAnagrams.Count == 0)
+                                Console.WriteLine(" :  << Could not find any anagrams for this word >>");
+                            else
+                            {
+                                string anagramsText = string.Join(", ", foundAnagrams.ToArray());
+
+                                Console.WriteLine(" : " + anagramsText);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Oopps... An error occured");
+                            Console.WriteLine(e.ToString());
                         }
                     }
                 }
             }
 
-            Console.WriteLine("Good Bye");
-            Console.ReadKey();
+            WriteConsoleWithRedColor("Goodbye");
+            Thread.Sleep(2000);
+        }
+
+        private static void WriteConsoleWithRedColor(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine(message);
+
+            Console.ResetColor();
         }
     }
 }

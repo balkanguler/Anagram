@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnagramProvider.cs" />
     <Compile Include="DeterministicAnagramFinder.cs" />
     <Compile Include="IAnagramFinder.cs" />
     <Compile Include="IWordRepository.cs" />

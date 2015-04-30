@@ -22,7 +22,7 @@ namespace Anagram.UnitTests
             var existingWords = new List<string>{"12345", "xyzte"};
             existingWords.AddRange(anagrams);
 
-            wordRepository.GetWordsWithLength(5).Returns(existingWords);
+            wordRepository.GetWordsWithLength(word.Length).Returns(existingWords);
 
             HeuristicAnagramFinder anagramFinder = new HeuristicAnagramFinder(wordRepository);
 
@@ -32,6 +32,23 @@ namespace Anagram.UnitTests
 
             anagrams.ForEach(a => Assert.IsTrue(foundCombinations.Contains(a)));
 
+        }
+        [Test]
+        public void DoesNotFindsSameWordAsAnagram()
+        {
+            IWordRepository wordRepository = Substitute.For<IWordRepository>();
+
+            var word = "abcd";
+ 
+            var existingWords = new List<string> { word };
+
+            wordRepository.GetWordsWithLength(4).Returns(existingWords);
+
+            HeuristicAnagramFinder anagramFinder = new HeuristicAnagramFinder(wordRepository);
+
+            var foundCombinations = anagramFinder.Find(word);
+
+            Assert.IsFalse(foundCombinations.Contains(word));
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Anagram
 
         public HeuristicAnagramFinder(IWordRepository wordRepository)
         {
-            // TODO: Complete member initialization
             this.wordRepository = wordRepository;
         }
 
@@ -33,6 +32,8 @@ namespace Anagram
         private bool areAnagrams(string word1, string word2)
         {
             if (word1.Length != word2.Length)
+                return false;
+            if (word1.Equals(word2))
                 return false;
 
             char[] charsOfWord1 = word1.ToCharArray();
